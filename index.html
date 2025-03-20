@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepChat - Your AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./favicon.svg">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <div class="sidebar">
+
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>DeepChat</h1>
+            </div>
+            <button id="new-chat" class="new-chat-btn">
+                <i class="fas fa-plus"></i> New Chat
+            </button>
+            <div class="chat-history">
+                <h3>Recent Chats</h3>
+                <ul id="history-list">
+                    <!-- Chat history will be populated here -->
+                </ul>
+            </div>
+            <div class="settings">
+                <button id="settings-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <div class="theme-toggle">
+                    <span>Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div> 
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="model-info">
+                    <span id="current-model">DeepSeek AI</span>
+                    <div class="model-status online">
+                        <span class="status-dot"></span>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="clear-chat" title="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button id="export-chat" title="Export Chat">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-container" id="chat-container">
+                <div class="welcome-screen">
+                    <div class="welcome-logo">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h2>Welcome to DeepChat</h2>
+                    <p>Your personal AI assistant powered by DeepSeek.</p>
+                    <div class="suggestion-chips">
+                        <button class="suggestion-chip"
+                            data-prompt="Write a professional email to schedule a meeting">Write a professional
+                            email</button>
+                        <button class="suggestion-chip" data-prompt="Explain quantum computing in simple terms">Explain
+                            quantum computing</button>
+                        <button class="suggestion-chip"
+                            data-prompt="Help me brainstorm ideas for a marketing campaign">Brainstorm marketing
+                            ideas</button>
+                        <button class="suggestion-chip" data-prompt="Write a Python function to analyze data">Write a
+                            Python function</button>
+                    </div>
+                </div>
+                <!-- Messages will be appended here -->
+            </div>
+
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea id="user-input" placeholder="Message DeepSeek..." rows="1"></textarea>
+                    <div class="input-actions">
+                        <button id="send-message" title="Send Message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="typing-indicator hidden">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="close-settings" class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>AI Model</h3>
+                    <div class="select-wrapper">
+                        <select id="model-select">
+                            <option value="deepseek-chat">DeepSeek Chat</option>
+                            <option value="deepseek-coder">DeepSeek Coder</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="appearance-options">
+                        <label class="radio-container">
+                            <input type="radio" name="theme" value="light" checked>
+                            <span class="custom-radio"></span>
+                            Light
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="theme" value="dark">
+                            <span class="custom-radio"></span>
+                            Dark
+                        </label>
+                        <label class="radio-container">
+                            <input type="radio" name="theme" value="system">
+                            <span class="custom-radio"></span>
+                            System
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Chat Settings</h3>
+                    <div class="slider-setting">
+                        <label for="temperature">Temperature</label>
+                        <div class="slider-container">
+                            <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                            <span id="temperature-value">0.7</span>
+                        </div>
+                        <p class="setting-description">Higher values make responses more creative, lower values make
+                            them more deterministic.</p>
+                    </div>
+                    <div class="slider-setting">
+                        <label for="max-tokens">Max Tokens</label>
+                        <div class="slider-container">
+                            <input type="range" id="max-tokens" min="256" max="4096" step="128" value="2048">
+                            <span id="max-tokens-value">2048</span>
+                        </div>
+                        <p class="setting-description">Maximum length of the response in tokens.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings" class="primary-btn">Save Changes</button>
+                <button id="reset-settings" class="secondary-btn">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
