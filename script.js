@@ -46,7 +46,7 @@ let settings = {
 
 // API Configuration
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const API_KEY = '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';
+const API_KEY = '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';
 
 // Initialize app
 function init() {
