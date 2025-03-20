@@ -588,3 +588,19 @@ function escapeHTML(text) {
 
 // Initialize the app
 document.addEventListener('DOMContentLoaded', init);
+
+
+// Sidebar Toggle Functionality
+const sidebar = document.querySelector('.sidebar');
+const menuToggle = document.getElementById('menu-toggle');
+
+menuToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+});
+
+// Close sidebar when clicking outside (for mobile users)
+document.addEventListener('click', (event) => {
+    if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+        sidebar.classList.remove('show');
+    }
+});

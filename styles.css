@@ -846,3 +846,71 @@ select {
 .history-item .delete-btn i {
     font-size: 1rem; /* Adjust icon size */
 }
+
+/* Hamburger Button Styles */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1100;
+    box-shadow: var(--shadow);
+    transition: background 0.3s ease-in-out;
+}
+
+.menu-toggle:hover {
+    background: var(--primary-dark);
+}
+
+.menu-toggle i {
+    font-size: 1.5rem;
+}
+
+/* Responsive Sidebar for Small Screens */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        width: 280px;
+        height: 100vh;
+        background-color: var(--card-bg);
+        box-shadow: var(--shadow);
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+    }
+    
+    .sidebar.show {
+        left: 0;
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+
+    .model-info {
+        margin-left: 8vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-toggle {
+        left: 10px;
+        top: 10px;
+        padding: 10px;
+    }
+    
+    .sidebar {
+        width: 250px;
+    }
+}
