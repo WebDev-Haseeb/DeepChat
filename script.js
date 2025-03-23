@@ -35,6 +35,7 @@ let chatHistory = [];
 let conversations = [];
 let currentConversationId = null;
 let isProcessing = false;
+let API_KEY = null;
 
 // Settings
 let settings = {
@@ -46,15 +47,52 @@ let settings = {
 
 // API Configuration
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-const API_KEY = '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';
 
 // Initialize app
-function init() {
+async function init() {
     loadSettings();
     applyTheme();
     loadConversations();
     setupEventListeners();
     adjustTextareaHeight();
+    
+    // Fetch API key from server
+    try {
+        await fetchApiKey();
+    } catch (error) {
+        console.error('Failed to fetch API key:', error);
+        showErrorMessage('Failed to load configuration. Please refresh and try again.');
+    }
+}
+
+// Fetch API key from secure endpoint
+async function fetchApiKey() {
+    try {
+        const response = await fetch('/api/config');
+        if (!response.ok) {
+            throw new Error('Failed to fetch API configuration');
+        }
+        const data = await response.json();
+        API_KEY = data.apiKey;
+    } catch (error) {
+        console.error('Error fetching API key:', error);
+        throw error;
+    }
+}
+
+// Show error message in chat
+function showErrorMessage(message) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message system';
+    messageDiv.innerHTML = `
+        <div class="message-avatar system">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="message-content">
+            ${message}
+        </div>
+    `;
+    chatContainer.appendChild(messageDiv);
 }
 
 // Load settings from localStorage
@@ -315,6 +353,12 @@ function closeSettingsModal() {
 async function handleSendMessage() {
     const message = userInput.value.trim();
     if (message === '' || isProcessing) return;
+    
+    // Check if API key is loaded
+    if (!API_KEY) {
+        showErrorMessage('API key is not loaded. Please refresh the page and try again.');
+        return;
+    }
     
     // Create a new conversation if we don't have one
     if (!currentConversationId) {
